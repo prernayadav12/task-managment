@@ -42,13 +42,13 @@ jobs:
 
     - name: Check Python formatting with Black
       run: |
-        black --version
-        black . --check --config pyproject.toml
+        python -m black --version
+        python -m black . --check --config pyproject.toml
 
     - name: Check Python style with Flake8
       run: |
-        flake8 --version
-        flake8 . --config=.flake8
+        python -m flake8 --version
+        python -m flake8 . --config=.flake8
 
     - name: Check JavaScript formatting
       run: |
