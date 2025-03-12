@@ -1,0 +1,7 @@
+[tool.black]
+line-length = 88
+target-version = ['py311']
+include = '\.pyi?$'
+force-exclude = 'node_modules'
+skip-string-normalization = false
+skip-magic-trailing-comma = false 

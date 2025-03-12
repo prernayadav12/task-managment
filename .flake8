@@ -7,6 +7,6 @@ exclude =
     build,
     dist,
     node_modules,
-    *.pyc,
-    *.egg-info,
-    .eggs 
+    venv
+per-file-ignores =
+    __init__.py:F401 

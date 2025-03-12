@@ -1,4 +1,8 @@
-* text=auto
-*.py text eol=lf
-*.yml text eol=lf
-*.json text eol=lf 
+* text=auto eol=lf
+*.{cmd,[cC][mM][dD]} text eol=crlf
+*.{bat,[bB][aA][tT]} text eol=crlf
+*.{py,[pP][yY]} text diff=python
+*.{js,[jJ][sS]} text
+*.{json,[jJ][sS][oO][nN]} text
+*.{yml,[yY][mM][lL]} text
+*.{md,[mM][dD]} text diff=markdown 
