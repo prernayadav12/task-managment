@@ -34,23 +34,31 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
 
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install black==25.1.0 flake8
-        npm ci
+        python -m pip install black==25.1.0 flake8
+
+    - name: Install Node.js dependencies
+      working-directory: ./task-management-frontend
+      run: npm ci
 
     - name: Check Python formatting with Black
       run: |
+        echo "Black version:"
         python -m black --version
+        echo "\nChecking formatting:"
         python -m black . --check --config pyproject.toml
 
     - name: Check Python style with Flake8
       run: |
+        echo "Flake8 version:"
         python -m flake8 --version
+        echo "\nChecking style:"
         python -m flake8 . --config=.flake8
 
     - name: Check JavaScript formatting
+      working-directory: ./task-management-frontend
       run: |
         npm run lint
         npm run format:check
@@ -150,44 +158,38 @@ jobs:
         pip install safety
         safety check
 
-  deploy:
-    needs: [test-backend, test-frontend, security]
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: production
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ env.PYTHON_VERSION }}
-        cache: 'pip'
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        npm ci
-
-    - name: Build frontend
-      run: npm run build
-      env:
-        CI: true
-        REACT_APP_API_URL: ${{ secrets.API_URL }}
-
-    - name: Deploy to production
-      env:
-        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: |
-        curl https://cli-assets.heroku.com/install.sh | sh
-        heroku container:login
-        heroku container:push web -a ${{ secrets.HEROKU_APP_NAME }}
-        heroku container:release web -a ${{ secrets.HEROKU_APP_NAME }} 
+  # Deployment job is commented out until deployment platform is chosen
+  # deploy:
+  #   needs: [test-backend, test-frontend, security]
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   environment: production
+  #
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #
+  #   - name: Set up Python
+  #     uses: actions/setup-python@v4
+  #     with:
+  #       python-version: ${{ env.PYTHON_VERSION }}
+  #       cache: 'pip'
+  #
+  #   - name: Set up Node.js
+  #     uses: actions/setup-node@v3
+  #     with:
+  #       node-version: ${{ env.NODE_VERSION }}
+  #       cache: 'npm'
+  #
+  #   - name: Install dependencies
+  #     run: |
+  #       python -m pip install --upgrade pip
+  #       pip install -r requirements.txt
+  #       npm ci
+  #
+  #   - name: Build frontend
+  #     run: npm run build
+  #     env:
+  #       CI: true
+  #       REACT_APP_API_URL: ${{ secrets.API_URL }}
+  #
+  #   # Add deployment steps here once deployment platform is chosen 
