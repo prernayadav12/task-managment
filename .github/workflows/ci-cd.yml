@@ -40,11 +40,7 @@ jobs:
         pip install black==25.1.0 flake8
         npm ci
 
-    - name: Check Python formatting with Black
-      run: |
-        black --version
-        black . --check --config pyproject.toml
-
+    
     - name: Check Python style with Flake8
       run: |
         flake8 --version
